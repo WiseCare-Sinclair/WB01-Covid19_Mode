@@ -1,0 +1,52 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 28
+
+    defaultConfig {
+        applicationId "com.samples.flironecamera"
+        minSdkVersion 21
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    repositories {
+        // default path where thermalsdk AAR is stored
+        flatDir dirs: '../../../modules/thermalsdk/build/outputs/aar'
+        // default path where androidsdk AAR is stored
+        flatDir dirs: '../../../modules/androidsdk/build/outputs/aar'
+        // superproject path where all required AARs are stored (for local debug builds only)
+        flatDir dirs: '../../../MastodonAndroid/prebuilt-aar'
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    aaptOptions{
+        noCompress "tflite"
+    }
+}
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    // add Thermal SDK 'aar' library located under 'modules/thermalsdk/build/outputs/aar'
+    // add Thermal SDK for Android 'aar' library located under 'modules/thermalsdk/build/outputs/aar'
+    implementation(name: 'androidsdk-release', ext: 'aar')
+    implementation(name: 'thermalsdk-release', ext: 'aar')
+    implementation 'com.google.mlkit:face-detection:16.0.1'
+    implementation 'org.jetbrains:annotations:15.0'
+    implementation('org.tensorflow:tensorflow-lite:0.0.0-nightly') { changing = true }
+
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+}
+
